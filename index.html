@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>شركة الأندلس للتقسيط</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #f1f1f1;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: background-color 0.4s ease;
+      animation: fadeIn 0.6s ease-in;
+    }
+
+    body.dark-mode .container {
+      background-color: #1e1e1e;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .settings-btn, .dark-btn, .print-btn {
+      background-color: #6c757d;
+      color: #fff;
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0 5px 10px;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    body.dark-mode .settings-btn,
+    body.dark-mode .dark-btn,
+    body.dark-mode .print-btn {
+      background-color: #333;
+      box-shadow: 0 0 8px #0ff;
+    }
+
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 25px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+      align-items: flex-end;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button.calc-btn {
+      background-color: #007bff;
+      color: #fff;
+      padding: 11px 15px;
+      font-size: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      min-width: 140px;
+    }
+
+    .tables {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .table-box {
+      flex: 1;
+      min-width: 300px;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    body.dark-mode table {
+      background-color: #262626;
+    }
+
+    body.dark-mode th {
+      background-color: #333;
+      color: #0ff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      width: 300px;
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="export-area">
+  <div class="top-bar">
+    <div>
+      <button class="settings-btn" onclick="openSettings()">⚙️ الإعدادات</button>
+      <button class="dark-btn" onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
+    </div>
+    <button class="print-btn" onclick="exportPDF()">📄 تصدير PDF</button>
+  </div>
+
+  <h2>شركة الأندلس للتقسيط</h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>📦 الفئة:</label>
+      <select id="category"></select>
+    </div>
+
+    <div class="form-group">
+      <label>💵 المبلغ المطلوب:</label>
+      <input type="number" id="amount" placeholder="مثال: 10000">
+    </div>
+
+    <div class="form-group">
+      <label>💰 المقدم:</label>
+      <input type="number" id="downPayment" placeholder="مثال: 2000">
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">احسب الأقساط</button>
+  </div>
+
+  <div class="tables" id="resultTables"></div>
+</div>
+
+<!-- نافذة الإعدادات -->
+<div class="modal" id="settingsModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeSettings()">×</button>
+    <h3>تعديل الفائدة وإضافة فئة</h3>
+    <div id="settingsContent"></div>
+    <hr>
+    <label>➕ فئة جديدة:</label>
+    <input type="text" id="newCategory" placeholder="اسم الفئة الجديدة">
+    <input type="number" id="newRate" placeholder="نسبة الفائدة (%)">
+    <button onclick="addCategory()">➕ إضافة</button>
+    <hr>
+    <button onclick="saveSettings()">💾 حفظ التعديلات</button>
+  </div>
+</div>
+
+<script>
+const table1 = [3, 6, 8, 10, 12];
+const table2 = [15, 18, 24, 30, 36];
+
+let interestByCategory = JSON.parse(localStorage.getItem("interests")) || {
+  "موبايلات": 64,
+  "أجهزة كهربائية": 60,
+  "أثاث": 58,
+  "ملابس": 50
+};
+
+function populateCategoryOptions() {
+  const catSelect = document.getElementById("category");
+  catSelect.innerHTML = `<option value="">اختر الفئة</option>`;
+  for (const cat in interestByCategory) {
+    catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+  }
+}
+
+function openSettings() {
+  const modal = document.getElementById("settingsModal");
+  const content = document.getElementById("settingsContent");
+  content.innerHTML = '';
+  for (const cat in interestByCategory) {
+    content.innerHTML += `
+      <label>${cat} (%):</label>
+      <input type="number" id="rate-${cat}" value="${interestByCategory[cat]}">
+    `;
+  }
+  modal.style.display = "flex";
+}
+
+function closeSettings() {
+  document.getElementById("settingsModal").style.display = "none";
+}
+
+function saveSettings() {
+  for (const cat in interestByCategory) {
+    const input = document.getElementById(`rate-${cat}`);
+    interestByCategory[cat] = parseFloat(input.value) || 0;
+  }
+  localStorage.setItem("interests", JSON.stringify(interestByCategory));
+  populateCategoryOptions();
+  closeSettings();
+}
+
+function addCategory() {
+  const name = document.getElementById("newCategory").value.trim();
+  const rate = parseFloat(document.getElementById("newRate").value);
+  if (!name || isNaN(rate)) {
+    alert("يرجى إدخال اسم الفئة والنسبة.");
+    return;
+  }
+  interestByCategory[name] = rate;
+  localStorage.setItem("interests", JSON.stringify(interestByCategory));
+  populateCategoryOptions();
+  document.getElementById("newCategory").value = '';
+  document.getElementById("newRate").value = '';
+  openSettings();
+}
+
+function roundTo5(num) {
+  return Math.round(num / 5) * 5;
+}
+
+function calculate() {
+  const amount = parseFloat(document.getElementById('amount').value);
+  const down = parseFloat(document.getElementById('downPayment').value);
+  const category = document.getElementById('category').value;
+  const container = document.getElementById('resultTables');
+
+  if (!category) return alert("يرجى اختيار الفئة.");
+  if (isNaN(amount) || amount <= 0) return alert("يرجى إدخال مبلغ صحيح.");
+  if (isNaN(down) || down < 0 || down > amount) return alert("يرجى إدخال مقدم صحيح.");
+
+  const rate = (interestByCategory[category] || 0) / 100;
+  const remain = amount - down;
+
+  const buildTable = (terms) => {
+    let html = `<table><tr><th>عدد الشهور</th><th>القسط</th><th>الإجمالي</th></tr>`;
+    terms.forEach((months, i) => {
+      const interest = remain * rate * (months / 12);
+      const total = roundTo5(remain + interest);
+      const monthly = roundTo5(total / months);
+      html += `<tr style="animation: fadeIn 0.3s ease ${i * 0.05}s forwards; opacity: 0;"><td>${months}</td><td>${monthly} جم</td><td>${total} جم</td></tr>`;
+    });
+    html += `</table>`;
+    return html;
+  };
+
+  container.innerHTML = `
+    <div class="table-box">${buildTable(table1)}</div>
+    <div class="table-box">${buildTable(table2)}</div>
+  `;
+}
+
+function exportPDF() {
+  const element = document.getElementById("export-area");
+  const opt = {
+    margin: 0.3,
+    filename: 'تقسيط-الأندلس.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+}
+
+window.onload = () => {
+  populateCategoryOptions();
+};
+</script>
+</body>
+</html>
