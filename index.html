@@ -57,22 +57,8 @@
     th { background-color: #f1f1f1; color: #333; }
     body.dark-mode table { background-color: #262626; }
     body.dark-mode th { background-color: #333; color: #0ff; }
-    .modal {
-      display: none; position: fixed; z-index: 10; right: 0; top: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-      justify-content: center; align-items: center;
-    }
-    .modal-content {
-      background: white; padding: 25px; border-radius: 8px;
-      width: 350px; position: relative; max-height: 90vh; overflow-y: auto;
-    }
-    .close-btn {
-      position: absolute; top: 10px; left: 10px;
-      background: #ff4d4d; color: white; border: none; border-radius: 50%;
-      width: 28px; height: 28px; font-size: 16px; cursor: pointer;
-    }
     @media print {
-      .top-bar, .form-row, .modal, .calc-btn, .settings-btn, .dark-btn, .print-btn {
+      .top-bar, .form-row, .calc-btn, .settings-btn, .dark-btn, .print-btn {
         display: none !important;
       }
       .container { box-shadow: none; }
@@ -84,8 +70,7 @@
 <div class="container">
   <div class="top-bar">
     <div>
-      <button class="settings-btn" onclick="openSettings()">⚙️ الإعدادات</button>
-      <button class="dark-btn" onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
+      <button class="settings-btn" onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
     </div>
     <button class="print-btn" onclick="exportPDF()">📄 تصدير PDF</button>
   </div>
@@ -98,7 +83,13 @@
   <div class="form-row">
     <div class="form-group">
       <label>📦 الفئة:</label>
-      <select id="category"></select>
+      <select id="category">
+        <option value="موبايلات">موبايلات</option>
+        <option value="أجهزة كهربائية">أجهزة كهربائية</option>
+        <option value="أثاث">أثاث</option>
+        <option value="ملابس">ملابس</option>
+        <option value="أقساط خاصة">أقساط خاصة</option>
+      </select>
     </div>
     <div class="form-group">
       <label>💵 المبلغ المطلوب:</label>
@@ -114,116 +105,26 @@
   <div class="tables" id="resultTables"></div>
 </div>
 
-<!-- نافذة الإعدادات -->
-<div class="modal" id="settingsModal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeSettings()">×</button>
-    <h3>تعديل الفائدة وإضافة فئة</h3>
-    <div id="settingsContent"></div>
-    <hr>
-    <label>➕ فئة جديدة:</label>
-    <input type="text" id="newCategory" placeholder="اسم الفئة الجديدة">
-    <input type="number" id="newRate" placeholder="نسبة الفائدة (%)">
-    <button onclick="addCategory()">➕ إضافة</button>
-    <hr>
-    <button onclick="saveSettings()">💾 حفظ التعديلات</button>
-  </div>
-</div>
-
 <script>
 const table1 = [3, 6, 8, 10, 12];
 const table2 = [15, 18, 24, 30, 36];
-const allDurations = [...table1, ...table2];
 
-let saved = localStorage.getItem('interestData');
-let interestByCategory = saved ? JSON.parse(saved) : {
-  "موبايلات": { "3": 12, "6": 18, "12": 30, "24": 40 },
-  "أجهزة كهربائية": { "6": 14, "12": 26, "24": 38 },
-  "أثاث": { "6": 12, "12": 24, "24": 36 },
-  "ملابس": { "6": 10, "12": 20 }
+// القيمة الإجمالية لكل 1000 جنيه حسب عدد الشهور
+const fixedTotals = {
+  3: 14.5,
+  6: 29,
+  8: 38.67,
+  10: 48.33,
+  12: 58,
+  15: 72.5,
+  18: 87,
+  24: 116,
+  30: 145,
+  36: 174
 };
-
-function populateCategoryOptions() {
-  const catSelect = document.getElementById("category");
-  catSelect.innerHTML = `<option value="">اختر الفئة</option>`;
-  for (const cat in interestByCategory) {
-    catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
-  }
-}
 
 function roundTo5(num) {
   return Math.round(num / 5) * 5;
-}
-
-function openSettings() {
-  const modal = document.getElementById("settingsModal");
-  const content = document.getElementById("settingsContent");
-  content.innerHTML = '';
-
-  for (const cat in interestByCategory) {
-    let inputs = '<div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">';
-    allDurations.forEach(months => {
-      const val = interestByCategory[cat][months] ?? '';
-      inputs += `
-        <div style="width:18%; min-width:60px;">
-          <label style="font-size:13px;">${months} شهر:</label>
-          <input type="number" id="rate-${cat}-${months}" value="${val}" style="width:100%;">
-        </div>
-      `;
-    });
-    inputs += '</div>';
-
-    content.innerHTML += `
-      <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 15px;">
-        <strong>${cat}</strong>
-        <button onclick="deleteCategory('${cat}')" style="float:left; background:red; color:white; border:none; padding:3px 8px; border-radius:5px;">🗑️</button>
-        ${inputs}
-      </div>
-    `;
-  }
-
-  modal.style.display = "flex";
-}
-
-function closeSettings() {
-  document.getElementById("settingsModal").style.display = "none";
-}
-
-function saveSettings() {
-  for (const cat in interestByCategory) {
-    allDurations.forEach(months => {
-      const input = document.getElementById(`rate-${cat}-${months}`);
-      if (input) interestByCategory[cat][months] = parseFloat(input.value) || 0;
-    });
-  }
-  localStorage.setItem('interestData', JSON.stringify(interestByCategory));
-  populateCategoryOptions();
-  closeSettings();
-}
-
-function addCategory() {
-  const name = document.getElementById("newCategory").value.trim();
-  const rate = parseFloat(document.getElementById("newRate").value);
-  if (!name || isNaN(rate)) {
-    alert("يرجى إدخال اسم الفئة والنسبة.");
-    return;
-  }
-  interestByCategory[name] = {};
-  allDurations.forEach(months => interestByCategory[name][months] = rate);
-  localStorage.setItem('interestData', JSON.stringify(interestByCategory));
-  populateCategoryOptions();
-  document.getElementById("newCategory").value = '';
-  document.getElementById("newRate").value = '';
-  openSettings();
-}
-
-function deleteCategory(cat) {
-  if (confirm(`هل أنت متأكد من حذف الفئة "${cat}"؟`)) {
-    delete interestByCategory[cat];
-    localStorage.setItem('interestData', JSON.stringify(interestByCategory));
-    populateCategoryOptions();
-    openSettings();
-  }
 }
 
 function calculate() {
@@ -238,13 +139,12 @@ function calculate() {
   }
 
   const remain = amount - down;
-  const categoryRates = interestByCategory[category] || {};
   const buildTable = (terms) => {
     let html = `<table><tr><th>عدد الشهور</th><th>القسط</th><th>الإجمالي</th></tr>`;
     terms.forEach(months => {
-      const rate = (categoryRates[months] || 0) / 100;
-      const interest = remain * rate * (months / 12);
-      const total = roundTo5(remain + interest);
+      const fixedTotal = fixedTotals[months];
+      if (!fixedTotal) return;
+      const total = roundTo5((remain / 1000) * fixedTotal);
       const monthly = roundTo5(total / months);
       html += `<tr><td>${months}</td><td>${monthly} جم</td><td>${total} جم</td></tr>`;
     });
@@ -266,7 +166,8 @@ function exportPDF() {
   }
 
   const opt = {
-    margin: 0.5, filename: 'نتيجة-التقسيط.pdf',
+    margin: 0.5,
+    filename: 'نتيجة-التقسيط.pdf',
     image: { type: 'jpeg', quality: 1 },
     html2canvas: { scale: 2, useCORS: true },
     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -278,8 +179,6 @@ function exportPDF() {
 function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
 }
-
-window.onload = () => { populateCategoryOptions(); };
 </script>
 </body>
 </html>
