@@ -215,9 +215,9 @@
   </div>
 
   <div style="text-align: center; margin-bottom: 10px;">
-  <img src="https://i.ibb.co/xtpQWn2L/IMG-4138.jpg" alt="Logo" style="max-width: 200px; height: auto; margin-bottom: 10px;">
-</div>
-<h2 style="margin-top: 0; margin-bottom: 25px;">شركة الأندلس للتقسيط</h2>
+    <img src="https://i.ibb.co/xtpQWn2L/IMG-4138.jpg" alt="Logo" style="max-width: 200px; height: auto; margin-bottom: 10px;">
+  </div>
+  <h2 style="margin-top: 0; margin-bottom: 25px;">شركة الأندلس للتقسيط</h2>
 
   <div class="form-row">
     <div class="form-group">
@@ -263,10 +263,10 @@ const table2 = [15, 18, 24, 30, 36];
 
 let saved = localStorage.getItem('interestData');
 let interestByCategory = saved ? JSON.parse(saved) : {
-  "موبايلات": 64,
-  "أجهزة كهربائية": 60,
-  "أثاث": 58,
-  "ملابس": 50
+  "موبايلات": { "3": 12, "6": 18, "12": 30, "24": 40 },
+  "أجهزة كهربائية": { "6": 14, "12": 26, "24": 38 },
+  "أثاث": { "6": 12, "12": 24, "24": 36 },
+  "ملابس": { "6": 10, "12": 20 }
 };
 
 function populateCategoryOptions() {
@@ -287,9 +287,23 @@ function openSettings() {
   content.innerHTML = '';
 
   for (const cat in interestByCategory) {
+    const durations = interestByCategory[cat];
+    let inputs = '';
+    for (const months in durations) {
+      inputs += `
+        <div style="margin-bottom:5px;">
+          <label>${months} شهر:</label>
+          <input type="number" id="rate-${cat}-${months}" value="${durations[months]}">
+        </div>
+      `;
+    }
+
     content.innerHTML += `
-      <label>${cat} (%):</label>
-      <input type="number" id="rate-${cat}" value="${interestByCategory[cat]}">
+      <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+        <strong>${cat}</strong>
+        <button onclick="deleteCategory('${cat}')" style="float:left; background:red; color:white; border:none; padding:3px 8px; border-radius:5px;">🗑️</button>
+        ${inputs}
+      </div>
     `;
   }
 
@@ -302,8 +316,11 @@ function closeSettings() {
 
 function saveSettings() {
   for (const cat in interestByCategory) {
-    const input = document.getElementById(`rate-${cat}`);
-    interestByCategory[cat] = parseFloat(input.value) || 0;
+    const durations = interestByCategory[cat];
+    for (const months in durations) {
+      const input = document.getElementById(`rate-${cat}-${months}`);
+      interestByCategory[cat][months] = parseFloat(input.value) || 0;
+    }
   }
   localStorage.setItem('interestData', JSON.stringify(interestByCategory));
   populateCategoryOptions();
@@ -317,12 +334,21 @@ function addCategory() {
     alert("يرجى إدخال اسم الفئة والنسبة.");
     return;
   }
-  interestByCategory[name] = rate;
+  interestByCategory[name] = { "6": rate, "12": rate, "24": rate };
   localStorage.setItem('interestData', JSON.stringify(interestByCategory));
   populateCategoryOptions();
   document.getElementById("newCategory").value = '';
   document.getElementById("newRate").value = '';
   openSettings();
+}
+
+function deleteCategory(cat) {
+  if (confirm(`هل أنت متأكد من حذف الفئة "${cat}"؟`)) {
+    delete interestByCategory[cat];
+    localStorage.setItem('interestData', JSON.stringify(interestByCategory));
+    populateCategoryOptions();
+    openSettings();
+  }
 }
 
 function calculate() {
@@ -331,26 +357,17 @@ function calculate() {
   const category = document.getElementById('category').value;
   const container = document.getElementById('resultTables');
 
-  if (!category) {
-    alert("يرجى اختيار الفئة.");
+  if (!category || isNaN(amount) || amount <= 0 || isNaN(down) || down < 0 || down > amount) {
+    alert("يرجى إدخال بيانات صحيحة.");
     return;
   }
 
-  if (isNaN(amount) || amount <= 0) {
-    alert("يرجى إدخال مبلغ صحيح.");
-    return;
-  }
-
-  if (isNaN(down) || down < 0 || down > amount) {
-    alert("يرجى إدخال مقدم صحيح.");
-    return;
-  }
-
-  const rate = (interestByCategory[category] || 0) / 100;
   const remain = amount - down;
+  const categoryRates = interestByCategory[category] || {};
   const buildTable = (terms) => {
     let html = `<table><tr><th>عدد الشهور</th><th>القسط</th><th>الإجمالي</th></tr>`;
-    terms.forEach((months, i) => {
+    terms.forEach(months => {
+      const rate = (categoryRates[months] || 0) / 100;
       const interest = remain * rate * (months / 12);
       const total = roundTo5(remain + interest);
       const monthly = roundTo5(total / months);
@@ -377,10 +394,7 @@ function exportPDF() {
     margin: 0.5,
     filename: 'نتيجة-التقسيط.pdf',
     image: { type: 'jpeg', quality: 1 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true
-    },
+    html2canvas: { scale: 2, useCORS: true },
     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
   };
 
