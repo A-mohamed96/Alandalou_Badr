@@ -8,8 +8,7 @@
     body {
       font-family: 'Cairo', Tahoma, sans-serif;
       background-color: #f2f4f8;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       transition: background-color 0.4s, color 0.4s;
     }
 
@@ -25,181 +24,81 @@
       padding: 25px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      transition: background-color 0.4s ease;
-      animation: fadeIn 0.6s ease-in;
     }
 
     body.dark-mode .container {
       background-color: #1e1e1e;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .top-bar {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px;
     }
 
-    .settings-btn, .dark-btn, .print-btn {
+    .settings-btn, .dark-btn, .print-btn, .calc-btn {
       background-color: #6c757d;
-      color: #fff;
-      padding: 8px 14px;
-      font-size: 14px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 5px 0 5px 10px;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      color: #fff; padding: 8px 14px;
+      border: none; border-radius: 5px;
+      cursor: pointer; margin: 5px 0 5px 10px;
     }
 
-    body.dark-mode .settings-btn,
-    body.dark-mode .dark-btn,
-    body.dark-mode .print-btn {
+    body.dark-mode button {
       background-color: #333;
-      box-shadow: 0 0 8px #0ff;
     }
 
     h2 {
-      text-align: center;
-      color: #007bff;
-      margin-bottom: 25px;
+      text-align: center; color: #007bff; margin-bottom: 25px;
     }
 
     .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 25px;
-      align-items: flex-end;
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; align-items: flex-end;
     }
 
     .form-group {
-      flex: 1;
-      min-width: 180px;
+      flex: 1; min-width: 180px;
     }
 
     label {
-      font-weight: bold;
-      font-size: 14px;
-      display: block;
-      margin-bottom: 5px;
+      font-weight: bold; display: block; margin-bottom: 5px;
     }
 
     input, select {
-      width: 100%;
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button.calc-btn {
-      background-color: #007bff;
-      color: #fff;
-      padding: 11px 15px;
-      font-size: 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      min-width: 140px;
+      width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;
     }
 
     .tables {
-      display: flex;
-      gap: 20px;
-      margin-top: 30px;
-      flex-wrap: wrap;
+      display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap;
     }
 
     .table-box {
-      flex: 1;
-      min-width: 300px;
-      animation: slideUp 0.5s ease;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      flex: 1; min-width: 300px;
     }
 
     table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
+      width: 100%; border-collapse: collapse; text-align: center;
     }
 
     th, td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f1f1f1;
-      color: #333;
-    }
-
-    body.dark-mode table {
-      background-color: #262626;
-    }
-
-    body.dark-mode th {
-      background-color: #333;
-      color: #0ff;
+      padding: 10px; border-bottom: 1px solid #ddd;
     }
 
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      right: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
+      display: none; position: fixed; z-index: 10;
+      right: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); justify-content: center; align-items: center;
     }
 
     .modal-content {
-      background: white;
-      padding: 25px;
-      border-radius: 8px;
-      width: 300px;
-      position: relative;
+      background: white; padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; position: relative;
     }
 
     .close-btn {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #ff4d4d;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      font-size: 16px;
-      cursor: pointer;
+      position: absolute; top: 10px; left: 10px;
+      background: #ff4d4d; color: white; border: none;
+      border-radius: 50%; width: 28px; height: 28px;
     }
 
     @media print {
-      .top-bar,
-      .form-row,
-      .modal,
-      .calc-btn,
-      .settings-btn,
-      .dark-btn,
-      .print-btn {
-        display: none !important;
-      }
-      .container {
-        box-shadow: none;
-      }
+      .top-bar, .form-row, .modal, .calc-btn { display: none !important; }
     }
   </style>
 </head>
@@ -214,10 +113,10 @@
     <button class="print-btn" onclick="exportPDF()">📄 تصدير PDF</button>
   </div>
 
-  <div style="text-align: center; margin-bottom: 10px;">
-  <img src="https://i.ibb.co/xtpQWn2L/IMG-4138.jpg" alt="Logo" style="max-width: 200px; height: auto; margin-bottom: 10px;">
-</div>
-<h2 style="margin-top: 0; margin-bottom: 25px;">شركة الأندلس للتقسيط</h2>
+  <div style="text-align:center;">
+    <img src="https://i.ibb.co/xtpQWn2L/IMG-4138.jpg" style="max-width:200px;">
+    <h2>شركة الأندلس للتقسيط</h2>
+  </div>
 
   <div class="form-row">
     <div class="form-group">
@@ -245,7 +144,7 @@
 <div class="modal" id="settingsModal">
   <div class="modal-content">
     <button class="close-btn" onclick="closeSettings()">×</button>
-    <h3>تعديل الفائدة وإضافة فئة</h3>
+    <h3>تعديل الفائدة وإضافة/حذف فئة</h3>
     <div id="settingsContent"></div>
     <hr>
     <label>➕ فئة جديدة:</label>
@@ -263,11 +162,18 @@ const table2 = [15, 18, 24, 30, 36];
 
 let saved = localStorage.getItem('interestData');
 let interestByCategory = saved ? JSON.parse(saved) : {
-  "موبايلات": 64,
-  "أجهزة كهربائية": 60,
-  "أثاث": 58,
-  "ملابس": 50
+  "موبايلات": { base: 64, terms: {} },
+  "أجهزة كهربائية": { base: 60, terms: {} },
+  "أثاث": { base: 58, terms: {} },
+  "ملابس": { base: 50, terms: {} }
 };
+
+// ترقية البيانات القديمة
+for (const cat in interestByCategory) {
+  if (typeof interestByCategory[cat] === 'number') {
+    interestByCategory[cat] = { base: interestByCategory[cat], terms: {} };
+  }
+}
 
 function populateCategoryOptions() {
   const catSelect = document.getElementById("category");
@@ -287,13 +193,39 @@ function openSettings() {
   content.innerHTML = '';
 
   for (const cat in interestByCategory) {
+    const base = interestByCategory[cat].base || 0;
+    const terms = interestByCategory[cat].terms || {};
     content.innerHTML += `
-      <label>${cat} (%):</label>
-      <input type="number" id="rate-${cat}" value="${interestByCategory[cat]}">
+      <div style="border:1px solid #ccc;padding:10px;margin-bottom:10px;border-radius:6px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <label style="font-weight:bold;">${cat}</label>
+          <button onclick="deleteCategory('${cat}')" style="background:#dc3545;color:#fff;padding:3px 10px;border:none;border-radius:4px;">🗑 حذف</button>
+        </div>
+        <label>الفائدة الأساسية (%):</label>
+        <input type="number" id="rate-${cat}" value="${base}">
+        <div style="margin-top:10px;">
+          <label style="font-weight:bold;">الفائدة لكل مدة:</label>
+          ${[...table1, ...table2].map(m => `
+            <div style="margin-bottom:5px;">
+              <label>${m} شهر:</label>
+              <input type="number" id="rate-${cat}-${m}" value="${terms[m] || ''}">
+            </div>
+          `).join('')}
+        </div>
+      </div>
     `;
   }
 
   modal.style.display = "flex";
+}
+
+function deleteCategory(cat) {
+  if (confirm(`هل أنت متأكد من حذف الفئة "${cat}"؟`)) {
+    delete interestByCategory[cat];
+    localStorage.setItem('interestData', JSON.stringify(interestByCategory));
+    populateCategoryOptions();
+    openSettings();
+  }
 }
 
 function closeSettings() {
@@ -302,8 +234,13 @@ function closeSettings() {
 
 function saveSettings() {
   for (const cat in interestByCategory) {
-    const input = document.getElementById(`rate-${cat}`);
-    interestByCategory[cat] = parseFloat(input.value) || 0;
+    const baseRate = parseFloat(document.getElementById(`rate-${cat}`).value) || 0;
+    const terms = {};
+    [...table1, ...table2].forEach(m => {
+      const val = parseFloat(document.getElementById(`rate-${cat}-${m}`).value);
+      if (!isNaN(val)) terms[m] = val;
+    });
+    interestByCategory[cat] = { base: baseRate, terms };
   }
   localStorage.setItem('interestData', JSON.stringify(interestByCategory));
   populateCategoryOptions();
@@ -313,15 +250,12 @@ function saveSettings() {
 function addCategory() {
   const name = document.getElementById("newCategory").value.trim();
   const rate = parseFloat(document.getElementById("newRate").value);
-  if (!name || isNaN(rate)) {
-    alert("يرجى إدخال اسم الفئة والنسبة.");
-    return;
-  }
-  interestByCategory[name] = rate;
+  if (!name || isNaN(rate)) return alert("يرجى إدخال اسم الفئة والنسبة.");
+  interestByCategory[name] = { base: rate, terms: {} };
   localStorage.setItem('interestData', JSON.stringify(interestByCategory));
-  populateCategoryOptions();
   document.getElementById("newCategory").value = '';
   document.getElementById("newRate").value = '';
+  populateCategoryOptions();
   openSettings();
 }
 
@@ -331,26 +265,17 @@ function calculate() {
   const category = document.getElementById('category').value;
   const container = document.getElementById('resultTables');
 
-  if (!category) {
-    alert("يرجى اختيار الفئة.");
-    return;
+  if (!category || isNaN(amount) || amount <= 0 || isNaN(down) || down < 0 || down > amount) {
+    return alert("يرجى ملء البيانات بشكل صحيح.");
   }
 
-  if (isNaN(amount) || amount <= 0) {
-    alert("يرجى إدخال مبلغ صحيح.");
-    return;
-  }
-
-  if (isNaN(down) || down < 0 || down > amount) {
-    alert("يرجى إدخال مقدم صحيح.");
-    return;
-  }
-
-  const rate = (interestByCategory[category] || 0) / 100;
   const remain = amount - down;
+  const termsData = interestByCategory[category];
+
   const buildTable = (terms) => {
     let html = `<table><tr><th>عدد الشهور</th><th>القسط</th><th>الإجمالي</th></tr>`;
-    terms.forEach((months, i) => {
+    terms.forEach(months => {
+      const rate = (termsData.terms[months] ?? termsData.base) / 100;
       const interest = remain * rate * (months / 12);
       const total = roundTo5(remain + interest);
       const monthly = roundTo5(total / months);
@@ -368,33 +293,21 @@ function calculate() {
 
 function exportPDF() {
   const element = document.getElementById("resultTables");
-  if (!element.innerHTML.trim()) {
-    alert("يرجى أولاً احتساب الأقساط.");
-    return;
-  }
-
-  const opt = {
+  if (!element.innerHTML.trim()) return alert("يرجى أولاً احتساب الأقساط.");
+  html2pdf().set({
     margin: 0.5,
     filename: 'نتيجة-التقسيط.pdf',
     image: { type: 'jpeg', quality: 1 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true
-    },
+    html2canvas: { scale: 2, useCORS: true },
     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save();
+  }).from(element).save();
 }
 
 function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
 }
 
-window.onload = () => {
-  populateCategoryOptions();
-};
+window.onload = populateCategoryOptions;
 </script>
-
 </body>
 </html>
