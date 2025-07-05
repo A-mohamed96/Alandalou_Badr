@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>شركة الأندلس للتقسيط</title>
+  <style>
+    body {
+      font-family: 'Cairo', Tahoma, sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 8px 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: #6c757d;
+      color: #fff;
+      margin: 5px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .tables {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <div>
+      <button onclick="openSettings()">⚙️ الإعدادات</button>
+    </div>
+    <button onclick="calculate()">📊 احسب الأقساط</button>
+  </div>
+
+  <h2>شركة الأندلس للتقسيط</h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>الفئة:</label>
+      <select id="category"></select>
+    </div>
+
+    <div class="form-group">
+      <label>المبلغ:</label>
+      <input type="number" id="amount" placeholder="مثال: 10000">
+    </div>
+
+    <div class="form-group">
+      <label>المقدم:</label>
+      <input type="number" id="downPayment" placeholder="مثال: 2000">
+    </div>
+  </div>
+
+  <div class="tables" id="resultTables"></div>
+</div>
+
+<!-- نافذة الإعدادات -->
+<div class="modal" id="settingsModal">
+  <div class="modal-content">
+    <h3>تعديل الفائدة حسب المدة لكل فئة</h3>
+    <div id="settingsContent"></div>
+    <button onclick="saveSettings()">💾 حفظ التعديلات</button>
+    <button onclick="closeSettings()">❌ إغلاق</button>
+  </div>
+</div>
+
+<script>
+const table1 = [3, 6, 8, 10, 12];
+const table2 = [15, 18, 24, 30, 36];
+
+const allDurations = [...table1, ...table2];
+
+let interestData = JSON.parse(localStorage.getItem("interestData")) || {
+  "موبايلات": { "3": 60, "6": 62, "12": 65 },
+  "أجهزة كهربائية": { "6": 55, "12": 60, "18": 63 },
+  "أثاث": { "3": 50, "6": 52, "12": 58, "24": 60 },
+  "ملابس": { "3": 40, "6": 45, "12": 50 }
+};
+
+function populateCategoryOptions() {
+  const select = document.getElementById("category");
+  select.innerHTML = `<option value="">اختر الفئة</option>`;
+  for (const cat in interestData) {
+    select.innerHTML += `<option value="${cat}">${cat}</option>`;
+  }
+}
+
+function calculate() {
+  const cat = document.getElementById("category").value;
+  const amount = parseFloat(document.getElementById("amount").value);
+  const down = parseFloat(document.getElementById("downPayment").value);
+  const container = document.getElementById("resultTables");
+  if (!cat || isNaN(amount) || isNaN(down)) {
+    alert("يرجى إدخال البيانات كاملة");
+    return;
+  }
+  const remain = amount - down;
+  const buildTable = (durations) => {
+    let html = `<table><tr><th>المدة (شهور)</th><th>القسط الشهري</th><th>الإجمالي</th></tr>`;
+    durations.forEach(months => {
+      const rate = (interestData[cat]?.[months] || 0) / 100;
+      const interest = remain * rate * (months / 12);
+      const total = Math.round((remain + interest) / 5) * 5;
+      const monthly = Math.round(total / months / 5) * 5;
+      html += `<tr><td>${months}</td><td>${monthly} جم</td><td>${total} جم</td></tr>`;
+    });
+    html += `</table>`;
+    return html;
+  };
+  container.innerHTML = `
+    <div class="table-box">${buildTable(table1)}</div>
+    <div class="table-box">${buildTable(table2)}</div>
+  `;
+}
+
+function openSettings() {
+  const content = document.getElementById("settingsContent");
+  content.innerHTML = "";
+  for (const cat in interestData) {
+    content.innerHTML += `<h4>${cat}</h4>`;
+    allDurations.forEach(months => {
+      const val = interestData[cat][months] ?? '';
+      content.innerHTML += `
+        <label>${months} شهر:</label>
+        <input type="number" id="rate-${cat}-${months}" value="${val}" style="width:80px;margin-bottom:5px;">`;
+    });
+    content.innerHTML += "<hr>";
+  }
+  document.getElementById("settingsModal").style.display = "flex";
+}
+
+function closeSettings() {
+  document.getElementById("settingsModal").style.display = "none";
+}
+
+function saveSettings() {
+  for (const cat in interestData) {
+    allDurations.forEach(months => {
+      const input = document.getElementById(`rate-${cat}-${months}`);
+      if (input) {
+        const val = parseFloat(input.value);
+        if (!isNaN(val)) {
+          if (!interestData[cat]) interestData[cat] = {};
+          interestData[cat][months] = val;
+        }
+      }
+    });
+  }
+  localStorage.setItem("interestData", JSON.stringify(interestData));
+  closeSettings();
+}
+
+window.onload = populateCategoryOptions;
+</script>
+
+</body>
+</html>
