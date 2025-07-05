@@ -12,70 +12,145 @@
       padding: 0;
       transition: background-color 0.4s, color 0.4s;
     }
-    body.dark-mode { background-color: #121212; color: #f1f1f1; }
+    body.dark-mode {
+      background-color: #121212;
+      color: #f1f1f1;
+    }
     .container {
-      max-width: 1000px; margin: 40px auto; background-color: #fff; padding: 25px;
-      border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      transition: background-color 0.4s ease; animation: fadeIn 0.6s ease-in;
+      max-width: 1000px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      animation: fadeIn 0.6s ease-in;
     }
-    body.dark-mode .container { background-color: #1e1e1e; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .top-bar { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px; }
+    body.dark-mode .container {
+      background-color: #1e1e1e;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
     .settings-btn, .dark-btn, .print-btn {
-      background-color: #6c757d; color: #fff; padding: 8px 14px; font-size: 14px;
-      border: none; border-radius: 5px; cursor: pointer; margin: 5px 0 5px 10px;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      background-color: #6c757d;
+      color: #fff;
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0 5px 10px;
     }
-    body.dark-mode .settings-btn, body.dark-mode .dark-btn, body.dark-mode .print-btn {
-      background-color: #333; box-shadow: 0 0 8px #0ff;
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 25px;
     }
-    h2 { text-align: center; color: #007bff; margin-bottom: 25px; }
     .form-row {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      margin-bottom: 25px; align-items: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+      align-items: flex-end;
     }
-    .form-group { flex: 1; min-width: 180px; }
-    label { font-weight: bold; font-size: 14px; display: block; margin-bottom: 5px; }
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+    }
     input, select {
-      width: 100%; padding: 10px; font-size: 14px;
-      border: 1px solid #ccc; border-radius: 5px;
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button.calc-btn {
-      background-color: #007bff; color: #fff; padding: 11px 15px;
-      font-size: 15px; border: none; border-radius: 5px;
-      cursor: pointer; min-width: 140px;
+      background-color: #007bff;
+      color: #fff;
+      padding: 11px 15px;
+      font-size: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      min-width: 140px;
     }
     .tables {
-      display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
     }
     .table-box {
-      flex: 1; min-width: 300px; animation: slideUp 0.5s ease;
+      flex: 1;
+      min-width: 300px;
     }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    table { width: 100%; border-collapse: collapse; text-align: center; }
-    th, td { padding: 10px; border-bottom: 1px solid #ddd; }
-    th { background-color: #f1f1f1; color: #333; }
-    body.dark-mode table { background-color: #262626; }
-    body.dark-mode th { background-color: #333; color: #0ff; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f1f1f1;
+      color: #333;
+    }
     .modal {
-      display: none; position: fixed; z-index: 10; right: 0; top: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-      justify-content: center; align-items: center;
+      display: none;
+      position: fixed;
+      z-index: 10;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
     }
     .modal-content {
-      background: white; padding: 25px; border-radius: 8px;
-      width: 350px; position: relative; max-height: 90vh; overflow-y: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
     }
     .close-btn {
-      position: absolute; top: 10px; left: 10px;
-      background: #ff4d4d; color: white; border: none; border-radius: 50%;
-      width: 28px; height: 28px; font-size: 16px; cursor: pointer;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 16px;
+      cursor: pointer;
     }
     @media print {
       .top-bar, .form-row, .modal, .calc-btn, .settings-btn, .dark-btn, .print-btn {
         display: none !important;
       }
-      .container { box-shadow: none; }
+      .container {
+        box-shadow: none;
+      }
     }
   </style>
 </head>
@@ -131,16 +206,13 @@
 </div>
 
 <script>
-const table1 = [3, 6, 8, 10, 12];
-const table2 = [15, 18, 24, 30, 36];
-const allDurations = [...table1, ...table2];
+const allDurations = [3, 6, 8, 10, 12, 15, 18, 24, 30, 36];
 
-let saved = localStorage.getItem('interestData');
-let interestByCategory = saved ? JSON.parse(saved) : {
-  "موبايلات": { "3": 12, "6": 18, "12": 30, "24": 40 },
-  "أجهزة كهربائية": { "6": 14, "12": 26, "24": 38 },
-  "أثاث": { "6": 12, "12": 24, "24": 36 },
-  "ملابس": { "6": 10, "12": 20 }
+let interestByCategory = {
+  "موبايلات": {
+    "3": 14.5, "6": 29, "8": 38.67, "10": 48.33, "12": 58,
+    "15": 72.5, "18": 87, "24": 116, "30": 145, "36": 174
+  }
 };
 
 function populateCategoryOptions() {
@@ -151,23 +223,19 @@ function populateCategoryOptions() {
   }
 }
 
-function roundTo5(num) {
-  return Math.round(num / 5) * 5;
-}
-
 function openSettings() {
   const modal = document.getElementById("settingsModal");
   const content = document.getElementById("settingsContent");
   content.innerHTML = '';
 
   for (const cat in interestByCategory) {
-    let inputs = '<div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">';
-    allDurations.forEach(months => {
-      const val = interestByCategory[cat][months] ?? '';
+    let inputs = '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
+    allDurations.forEach((months) => {
+      const value = interestByCategory[cat][months] ?? '';
       inputs += `
-        <div style="width:18%; min-width:60px;">
-          <label style="font-size:13px;">${months} شهر:</label>
-          <input type="number" id="rate-${cat}-${months}" value="${val}" style="width:100%;">
+        <div style="flex: 0 0 calc(20% - 10px); display: flex; flex-direction: column;">
+          <label style="font-size: 13px;">${months} شهر:</label>
+          <input type="number" id="rate-${cat}-${months}" value="${value}" style="width: 100%;">
         </div>
       `;
     });
@@ -191,12 +259,11 @@ function closeSettings() {
 
 function saveSettings() {
   for (const cat in interestByCategory) {
-    allDurations.forEach(months => {
+    for (const months of allDurations) {
       const input = document.getElementById(`rate-${cat}-${months}`);
-      if (input) interestByCategory[cat][months] = parseFloat(input.value) || 0;
-    });
+      interestByCategory[cat][months] = parseFloat(input.value) || 0;
+    }
   }
-  localStorage.setItem('interestData', JSON.stringify(interestByCategory));
   populateCategoryOptions();
   closeSettings();
 }
@@ -210,7 +277,6 @@ function addCategory() {
   }
   interestByCategory[name] = {};
   allDurations.forEach(months => interestByCategory[name][months] = rate);
-  localStorage.setItem('interestData', JSON.stringify(interestByCategory));
   populateCategoryOptions();
   document.getElementById("newCategory").value = '';
   document.getElementById("newRate").value = '';
@@ -220,7 +286,6 @@ function addCategory() {
 function deleteCategory(cat) {
   if (confirm(`هل أنت متأكد من حذف الفئة "${cat}"؟`)) {
     delete interestByCategory[cat];
-    localStorage.setItem('interestData', JSON.stringify(interestByCategory));
     populateCategoryOptions();
     openSettings();
   }
@@ -239,23 +304,16 @@ function calculate() {
 
   const remain = amount - down;
   const categoryRates = interestByCategory[category] || {};
-  const buildTable = (terms) => {
-    let html = `<table><tr><th>عدد الشهور</th><th>القسط</th><th>الإجمالي</th></tr>`;
-    terms.forEach(months => {
-      const rate = (categoryRates[months] || 0) / 100;
-      const interest = remain * rate * (months / 12);
-      const total = roundTo5(remain + interest);
-      const monthly = roundTo5(total / months);
-      html += `<tr><td>${months}</td><td>${monthly} جم</td><td>${total} جم</td></tr>`;
-    });
-    html += `</table>`;
-    return html;
-  };
-
-  container.innerHTML = `
-    <div class="table-box">${buildTable(table1)}</div>
-    <div class="table-box">${buildTable(table2)}</div>
-  `;
+  let html = `<table><tr><th>عدد الشهور</th><th>القسط</th><th>الإجمالي</th></tr>`;
+  allDurations.forEach(months => {
+    const rate = (categoryRates[months] || 0) / 100;
+    const interest = remain * rate * (months / 12);
+    const total = Math.round((remain + interest) / 5) * 5;
+    const monthly = Math.round(total / months / 5) * 5;
+    html += `<tr><td>${months}</td><td>${monthly} جم</td><td>${total} جم</td></tr>`;
+  });
+  html += `</table>`;
+  container.innerHTML = `<div class="table-box">${html}</div>`;
 }
 
 function exportPDF() {
@@ -264,22 +322,15 @@ function exportPDF() {
     alert("يرجى أولاً احتساب الأقساط.");
     return;
   }
-
-  const opt = {
-    margin: 0.5, filename: 'نتيجة-التقسيط.pdf',
-    image: { type: 'jpeg', quality: 1 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save();
+  html2pdf().from(element).save("نتيجة-التقسيط.pdf");
 }
 
 function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
 }
 
-window.onload = () => { populateCategoryOptions(); };
+window.onload = populateCategoryOptions;
 </script>
+
 </body>
 </html>
